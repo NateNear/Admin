@@ -1,0 +1,27 @@
+name: Manual Merge Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+
+jobs:
+  merge:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: pip install PyGithub
+
+      - name: Run Python script
+        run: python merge.py ${{ github.repository }} ${{ github.event.inputs.pr_number }}
